@@ -1,8 +1,8 @@
 import os
-import google.generativeai as genai
+from google import genai
 
-# Get API key from Streamlit Secrets
-api_key = os.getenv("GEMINI_API_KEY")
+# Initialize client
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 # Configure Gemini
 if api_key:
@@ -48,7 +48,7 @@ def money_health_score(savings_rate):
 # Agent 4: AI Explanation
 def explain_plan(income, expenses, plan, score):
 
-    if not api_key:
+    if not os.getenv("GEMINI_API_KEY"):
         return "Error: API key not found"
 
     prompt = f"""
@@ -66,8 +66,10 @@ def explain_plan(income, expenses, plan, score):
     """
 
     try:
-        model = genai.GenerativeModel("gemini-1.5-pro-latest")
-        response = model.generate_content(prompt)
+        response = client.models.generate_content(
+            model="gemini-2.0-flash",
+            contents=prompt
+        )
 
         return response.text
 
