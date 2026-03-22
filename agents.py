@@ -1,12 +1,14 @@
 import os
 import google.generativeai as genai
-from dotenv import load_dotenv
 
-load_dotenv()
+# Get API key from Streamlit Secrets
+api_key = os.getenv("GEMINI_API_KEY")
 
 # Configure Gemini
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-print("API KEY:", os.getenv("GEMINI_API_KEY"))
+if api_key:
+    genai.configure(api_key=api_key)
+else:
+    print("API key not found")
 
 # Agent 1: Analysis
 def analyze_finances(income, expenses):
@@ -46,6 +48,9 @@ def money_health_score(savings_rate):
 # Agent 4: AI Explanation
 def explain_plan(income, expenses, plan, score):
 
+    if not api_key:
+        return "Error: API key not found in Streamlit secrets"
+
     prompt = f"""
     User Income: {income}
     Expenses: {expenses}
@@ -61,9 +66,10 @@ def explain_plan(income, expenses, plan, score):
     """
 
     try:
-        model = genai.GenerativeModel("gemini-pro")
+        model = genai.GenerativeModel("gemini-1.5-flash")
         response = model.generate_content(prompt)
+
         return response.text
 
     except Exception as e:
-        return "AI service unavailable. Sample advice: Try to save at least 20% of your income."
+        return f"Error: {str(e)}"
