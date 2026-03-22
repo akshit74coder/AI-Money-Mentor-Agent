@@ -6,6 +6,7 @@ load_dotenv()
 
 # Configure Gemini
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+print("API KEY:", os.getenv("GEMINI_API_KEY"))
 
 # Agent 1: Analysis
 def analyze_finances(income, expenses):
