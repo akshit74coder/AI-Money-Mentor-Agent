@@ -49,7 +49,7 @@ def money_health_score(savings_rate):
 def explain_plan(income, expenses, plan, score):
 
     if not api_key:
-        return "Error: API key not found in Streamlit secrets"
+        return "Error: API key not found"
 
     prompt = f"""
     User Income: {income}
@@ -66,7 +66,7 @@ def explain_plan(income, expenses, plan, score):
     """
 
     try:
-        model = genai.GenerativeModel("gemini-pro")
+        model = genai.GenerativeModel("gemini-1.5-pro-latest")
         response = model.generate_content(prompt)
 
         return response.text
