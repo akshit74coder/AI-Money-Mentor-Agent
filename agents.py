@@ -4,11 +4,6 @@ from google import genai
 # Initialize client
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
-# Configure Gemini
-if api_key:
-    genai.configure(api_key=api_key)
-else:
-    print("API key not found")
 
 # Agent 1: Analysis
 def analyze_finances(income, expenses):
